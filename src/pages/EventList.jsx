@@ -37,7 +37,7 @@ const EventList = () => {
             </div>
             <Link
                 to="create"
-                className="btn btn-primary fixed bottom-4 right-4 rounded-full"
+                className="btn btn-secondary fixed bottom-4 right-4 rounded-full"
             >
                 <MdAdd size={24} />
             </Link>
