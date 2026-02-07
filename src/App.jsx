@@ -1,7 +1,35 @@
 import React from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router';
+import MainLayout from './layout/MainLayout';
+import Home from './pages/Home';
+import SignIn from './pages/SignIn';
+import SignUp from './pages/Signup';
+import ProtectedLayout from './layout/ProtectedLayout';
+import CreateEvent from './pages/CreateEvent';
+import EventDetails from './pages/EventDetails';
+import EventList from './pages/EventList';
 
 const App = () => {
-    return <div>Hello</div>;
+    return (
+        <BrowserRouter>
+            <Routes>
+                <Route path="/" element={<MainLayout />}>
+                    <Route index element={<Home />} />
+                    <Route path="/login" element={<SignIn />} />
+                    <Route path="/signup" element={<SignUp />} />
+                    <Route path="/protected" element={<ProtectedLayout />}>
+                        <Route path="" element={<EventList />}>
+                            <Route path="events" element={<CreateEvent />} />
+                            <Route
+                                path="events/:id"
+                                element={<EventDetails />}
+                            />
+                        </Route>
+                    </Route>
+                </Route>
+            </Routes>
+        </BrowserRouter>
+    );
 };
 
 export default App;
