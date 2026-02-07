@@ -2,7 +2,7 @@ import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router';
 import MainLayout from './layout/MainLayout';
 import Home from './pages/Home';
-import SignIn from './pages/SignIn';
+import LogIn from './pages/LogIn';
 import SignUp from './pages/Signup';
 import ProtectedLayout from './layout/ProtectedLayout';
 import CreateEvent from './pages/CreateEvent';
@@ -15,7 +15,7 @@ const App = () => {
             <Routes>
                 <Route path="/" element={<MainLayout />}>
                     <Route index element={<Home />} />
-                    <Route path="/login" element={<SignIn />} />
+                    <Route path="/login" element={<LogIn />} />
                     <Route path="/signup" element={<SignUp />} />
                     <Route path="/protected" element={<ProtectedLayout />}>
                         <Route path="" element={<EventList />}>
