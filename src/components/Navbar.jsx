@@ -1,7 +1,16 @@
 import React from 'react';
-import { NavLink, Link } from 'react-router';
+import { NavLink, Link, useLocation, useNavigate } from 'react-router';
 
 const Navbar = () => {
+    useLocation();
+    const navigate = useNavigate();
+    const isLoggedIn = !!localStorage.getItem('token');
+
+    const handleLogout = () => {
+        localStorage.removeItem('token');
+        navigate('/login');
+    };
+
     return (
         <div className="navbar bg-base-100 shadow-sm">
             <div className="flex-1">
@@ -22,26 +31,34 @@ const Navbar = () => {
                             Home
                         </NavLink>
                     </li>
-                    <li>
-                        <NavLink
-                            to="login"
-                            className={({ isActive }) =>
-                                isActive ? 'bg-primary' : ''
-                            }
-                        >
-                            Log In
-                        </NavLink>
-                    </li>
-                    <li>
-                        <NavLink
-                            to="signup"
-                            className={({ isActive }) =>
-                                isActive ? 'bg-primary' : ''
-                            }
-                        >
-                            Sign Up
-                        </NavLink>
-                    </li>
+                    {!isLoggedIn ? (
+                        <>
+                            <li>
+                                <NavLink
+                                    to="login"
+                                    className={({ isActive }) =>
+                                        isActive ? 'bg-primary' : ''
+                                    }
+                                >
+                                    Log In
+                                </NavLink>
+                            </li>
+                            <li>
+                                <NavLink
+                                    to="signup"
+                                    className={({ isActive }) =>
+                                        isActive ? 'bg-primary' : ''
+                                    }
+                                >
+                                    Sign Up
+                                </NavLink>
+                            </li>
+                        </>
+                    ) : (
+                        <li>
+                            <button onClick={handleLogout}>Logout</button>
+                        </li>
+                    )}
                     <li>
                         <NavLink
                             to="/protected"
