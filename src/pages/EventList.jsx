@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Outlet, Link } from 'react-router';
+import { Link } from 'react-router';
 import { MdAdd } from 'react-icons/md';
 import EventCard from '../components/EventCard';
 
@@ -30,18 +30,17 @@ const EventList = () => {
 
     return (
         <div>
-            <div className="grid lg:grid-cols-3 grid-cols-1 justify-center">
+            <div className="grid lg:grid-cols-3 grid-cols-1 justify-center mt-4">
                 {events.map((event) => (
                     <EventCard key={event.id} event={event} />
                 ))}
             </div>
             <Link
-                to="events"
+                to="create"
                 className="btn btn-primary fixed bottom-4 right-4 rounded-full"
             >
                 <MdAdd size={24} />
             </Link>
-            <Outlet />
         </div>
     );
 };

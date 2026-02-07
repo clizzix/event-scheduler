@@ -12,7 +12,7 @@ const Navbar = () => {
     };
 
     return (
-        <div className="navbar bg-base-100 shadow-sm">
+        <div className="navbar bg-base-300 shadow-md">
             <div className="flex-1">
                 <Link to="/" className="btn btn-ghost text-xl">
                     Event-Scheduler
@@ -25,7 +25,7 @@ const Navbar = () => {
                         <NavLink
                             to="/"
                             className={({ isActive }) =>
-                                isActive ? 'bg-primary' : ''
+                                isActive ? 'bg-secondary text-white' : ''
                             }
                         >
                             Home
@@ -37,7 +37,9 @@ const Navbar = () => {
                                 <NavLink
                                     to="login"
                                     className={({ isActive }) =>
-                                        isActive ? 'bg-primary' : ''
+                                        isActive
+                                            ? 'bg-secondary text-white'
+                                            : ''
                                     }
                                 >
                                     Log In
@@ -47,7 +49,9 @@ const Navbar = () => {
                                 <NavLink
                                     to="signup"
                                     className={({ isActive }) =>
-                                        isActive ? 'bg-primary' : ''
+                                        isActive
+                                            ? 'bg-secondary text-white'
+                                            : ''
                                     }
                                 >
                                     Sign Up
@@ -61,9 +65,9 @@ const Navbar = () => {
                     )}
                     <li>
                         <NavLink
-                            to="/protected"
+                            to="/events"
                             className={({ isActive }) =>
-                                isActive ? 'bg-primary' : ''
+                                isActive ? 'bg-secondary text-white' : ''
                             }
                         >
                             Events

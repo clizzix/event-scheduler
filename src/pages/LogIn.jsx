@@ -43,7 +43,7 @@ const LogIn = () => {
             }
 
             localStorage.setItem('token', data.token);
-            navigate('/protected');
+            navigate('/events');
         } catch (error) {
             console.error('Login error:', error.message);
             setError(error.message);

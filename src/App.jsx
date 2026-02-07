@@ -17,14 +17,13 @@ const App = () => {
                     <Route index element={<Home />} />
                     <Route path="/login" element={<LogIn />} />
                     <Route path="/signup" element={<SignUp />} />
-                    <Route path="/protected" element={<ProtectedLayout />}>
-                        <Route path="" element={<EventList />}>
-                            <Route path="events" element={<CreateEvent />} />
-                            <Route
-                                path="events/:id"
-                                element={<EventDetails />}
-                            />
-                        </Route>
+                    <Route element={<ProtectedLayout />}>
+                        <Route path="/events" element={<EventList />} />
+                        <Route
+                            path="/events/create"
+                            element={<CreateEvent />}
+                        />
+                        <Route path="/events/:id" element={<EventDetails />} />
                     </Route>
                 </Route>
             </Routes>
