@@ -3,7 +3,7 @@ import { BrowserRouter, Routes, Route } from 'react-router';
 import MainLayout from './layout/MainLayout';
 import Home from './pages/Home';
 import LogIn from './pages/LogIn';
-import SignUp from './pages/Signup';
+import SignUp from './pages/SignUp';
 import ProtectedLayout from './layout/ProtectedLayout';
 import EventDetails from './pages/EventDetails';
 import EventList from './pages/EventList';
