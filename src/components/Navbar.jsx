@@ -1,5 +1,6 @@
 import { NavLink, Link, useLocation, useNavigate } from 'react-router';
 import Searchbar from './Searchbar';
+import { toast } from 'react-toastify';
 
 const Navbar = () => {
     useLocation();
@@ -8,6 +9,7 @@ const Navbar = () => {
 
     const handleLogout = () => {
         localStorage.removeItem('token');
+        toast.info('You have been logged out.');
         navigate('/login');
     };
 

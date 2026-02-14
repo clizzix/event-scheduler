@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { MdEdit } from 'react-icons/md';
+import { toast } from 'react-toastify';
 
 const UpdateBtn = ({ event }) => {
     const [formData, setFormData] = useState({
@@ -11,7 +12,6 @@ const UpdateBtn = ({ event }) => {
         longitude: '',
     });
     const [loading, setLoading] = useState(false);
-    const [error, setError] = useState('');
 
     useEffect(() => {
         if (event) {
@@ -38,11 +38,10 @@ const UpdateBtn = ({ event }) => {
     const handleUpdate = async (e) => {
         e.preventDefault();
         setLoading(true);
-        setError('');
 
         const token = localStorage.getItem('token');
         if (!token) {
-            setError('You must be logged in to update an event');
+            toast.error('You must be logged in to update an event');
             setLoading(false);
             return;
         }
@@ -72,11 +71,12 @@ const UpdateBtn = ({ event }) => {
                 throw new Error(data.error || 'Failed to update event');
             }
 
+            toast.success('Event updated successfully!');
             document.getElementById(`update_modal_${event.id}`).close();
             window.location.reload();
         } catch (error) {
             console.error(error);
-            setError(error.message);
+            toast.error(error.message || 'Failed to update event.');
         } finally {
             setLoading(false);
         }
@@ -165,9 +165,6 @@ const UpdateBtn = ({ event }) => {
                                 value={formData.description}
                                 onChange={handleChange}
                             />
-                            {error && (
-                                <p className="text-error text-sm">{error}</p>
-                            )}
 
                             <button
                                 type="submit"

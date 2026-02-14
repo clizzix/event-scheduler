@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router';
+import { toast } from 'react-toastify';
 
 const LogIn = () => {
     const [formData, setFormData] = useState({
@@ -7,7 +8,6 @@ const LogIn = () => {
         password: '',
     });
     const [loading, setLoading] = useState(false);
-    const [error, setError] = useState('');
     const navigate = useNavigate();
 
     const handleChange = (e) => {
@@ -20,7 +20,6 @@ const LogIn = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
-        setError('');
 
         const { email, password } = formData;
 
@@ -43,10 +42,11 @@ const LogIn = () => {
             }
 
             localStorage.setItem('token', data.token);
+            toast.success('Logged in successfully!');
             navigate('/events');
         } catch (error) {
             console.error('Login error:', error.message);
-            setError(error.message);
+            toast.error(error.message || 'Login failed.');
         } finally {
             setLoading(false);
         }
@@ -86,11 +86,6 @@ const LogIn = () => {
                                     Forgot password?
                                 </a>
                             </div>
-                            {error && (
-                                <p className="text-error text-sm mt-2">
-                                    {error}
-                                </p>
-                            )}
                             <button
                                 type="submit"
                                 disabled={loading}

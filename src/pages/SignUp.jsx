@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router';
+import { toast } from 'react-toastify';
 
 const SignUp = () => {
     const [formData, setFormData] = useState({
@@ -8,7 +9,6 @@ const SignUp = () => {
         password: '',
     });
     const [loading, setLoading] = useState(false);
-    const [error, setError] = useState('');
     const navigate = useNavigate();
 
     const handleChange = (e) => {
@@ -21,7 +21,6 @@ const SignUp = () => {
     const handleSignUp = async (e) => {
         e.preventDefault();
         setLoading(true);
-        setError('');
 
         const { name, email, password } = formData;
 
@@ -42,12 +41,11 @@ const SignUp = () => {
             if (!res.ok) {
                 throw new Error(data.error || 'Sign up failed');
             }
-            localStorage.removeItem('token');
-            localStorage.setItem('user', JSON.stringify(data));
+            toast.success('Signed up successfully! Please log in.');
             navigate('/login');
         } catch (error) {
             console.error('Signup error:', error.message);
-            setError(error.message);
+            toast.error(error.message || 'Sign up failed.');
         } finally {
             setLoading(false);
         }
@@ -105,11 +103,6 @@ const SignUp = () => {
                                 required
                                 minLength={8}
                             />
-                            {error && (
-                                <p className="text-error text-sm mt-2">
-                                    {error}
-                                </p>
-                            )}
                             <button
                                 type="submit"
                                 disabled={loading}

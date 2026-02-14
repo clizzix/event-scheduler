@@ -1,22 +1,29 @@
 import React, { useState } from 'react';
 import { MdDelete } from 'react-icons/md';
 import { useNavigate } from 'react-router';
+import { toast } from 'react-toastify';
 
 const DeleteBtn = ({ eventId }) => {
     const [loading, setLoading] = useState(false);
-    const [error, setError] = useState('');
     const navigate = useNavigate();
 
-    const handleDelete = async () => {
+    const handleDelete = async (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        if (!eventId) {
+            toast.error('Invalid Event ID');
+            return;
+        }
+
         if (!window.confirm('Are you sure you want to delete this event?'))
             return;
 
         setLoading(true);
-        setError('');
 
         const token = localStorage.getItem('token');
         if (!token) {
-            setError('You must be logged in to delete an event');
+            toast.error('You must be logged in to delete an event');
             setLoading(false);
             return;
         }
@@ -37,31 +44,33 @@ const DeleteBtn = ({ eventId }) => {
                 const data = await res.json();
                 throw new Error(data.error || 'Failed to delete event');
             }
-
+            toast.success('Deleted Successfully!', {
+                position: 'top-right',
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: false,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: 'dark',
+            });
             navigate('/events');
         } catch (error) {
             console.error(error);
-            setError(error.message);
+            toast.error(error.message || 'Failed to delete event.');
         } finally {
             setLoading(false);
         }
     };
     return (
-        <div>
-            {error && (
-                <p className="text-error text-sm absolute top-20 right-8 bg-base-100 p-2 rounded">
-                    {error}
-                </p>
-            )}
-            <button
-                type="button"
-                className="btn btn-error mt-2 text-white absolute top-8 right-8"
-                disabled={loading}
-                onClick={handleDelete}
-            >
-                <MdDelete size={24} />
-            </button>
-        </div>
+        <button
+            type="button"
+            className="btn btn-error mt-2 text-white absolute top-8 right-8"
+            disabled={loading}
+            onClick={handleDelete}
+        >
+            <MdDelete size={24} />
+        </button>
     );
 };
 

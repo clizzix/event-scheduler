@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { MdAdd } from 'react-icons/md';
+import { toast } from 'react-toastify';
 
 const CreateEvent = () => {
     const [formData, setFormData] = useState({
@@ -26,14 +27,16 @@ const CreateEvent = () => {
         setError('');
 
         if (!formData.location) {
-            setError('Please enter a location');
+            const msg = 'Please enter a location';
+            toast.warn(msg);
             setLoading(false);
             return;
         }
 
         const token = localStorage.getItem('token');
         if (!token) {
-            setError('You must be logged in to create an event');
+            const msg = 'You must be logged in to create an event';
+            toast.error(msg);
             setLoading(false);
             return;
         }
@@ -64,6 +67,7 @@ const CreateEvent = () => {
                 throw new Error(data.error || 'Failed to create event');
             }
 
+            toast.success('Event created successfully!');
             document.getElementById('my_modal_4').close();
             setFormData({
                 title: '',
@@ -76,7 +80,7 @@ const CreateEvent = () => {
             window.location.reload();
         } catch (error) {
             console.error(error);
-            setError(error.message);
+            toast.error(error.message || 'Failed to create event.');
         } finally {
             setLoading(false);
         }
@@ -158,9 +162,6 @@ const CreateEvent = () => {
                                 value={formData.description}
                                 onChange={handleChange}
                             />
-                            {error && (
-                                <p className="text-error text-sm">{error}</p>
-                            )}
 
                             <button
                                 type="submit"
