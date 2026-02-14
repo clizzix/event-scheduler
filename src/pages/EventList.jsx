@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router';
-import { MdAdd } from 'react-icons/md';
 import EventCard from '../components/EventCard';
+import CreateEvent from '../components/CreateEvent';
 
 const EventList = () => {
     const [events, setEvents] = useState([]);
@@ -9,24 +8,34 @@ const EventList = () => {
     const [error, setError] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
 
-    useEffect(() => {
+    const fetchEvents = async () => {
         setIsLoading(true);
-        const fetchEvents = async () => {
-            try {
-                const res = await fetch(
-                    `${import.meta.env.VITE_BACKEND_URL}/api/events?page=${currentPage}&limit=10`,
-                );
-                const data = await res.json();
-                setEvents(data.results);
-                console.log(data);
-            } catch (error) {
-                console.error(error);
-            } finally {
-                setIsLoading(false);
-            }
-        };
+        try {
+            const res = await fetch(
+                `${import.meta.env.VITE_BACKEND_URL}/api/events?page=${currentPage}&limit=10`,
+                { cache: 'no-store' },
+            );
+            const data = await res.json();
+            setEvents(data.results);
+            console.log(data);
+        } catch (error) {
+            console.error(error);
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    useEffect(() => {
         fetchEvents();
-    }, []);
+    }, [currentPage]);
+
+    const handleEventCreated = () => {
+        if (currentPage !== 1) {
+            setCurrentPage(1);
+        } else {
+            fetchEvents();
+        }
+    };
 
     return (
         <div>
@@ -35,12 +44,7 @@ const EventList = () => {
                     <EventCard key={event.id} event={event} />
                 ))}
             </div>
-            <Link
-                to="create"
-                className="btn btn-secondary fixed bottom-4 right-4 rounded-full"
-            >
-                <MdAdd size={24} />
-            </Link>
+            <CreateEvent onEventCreated={handleEventCreated} />
         </div>
     );
 };
