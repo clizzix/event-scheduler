@@ -11,7 +11,7 @@ const Navbar = () => {
     };
 
     return (
-        <div className="navbar bg-base-300 shadow-md">
+        <div className="navbar bg-white/10 backdrop-blur-md border border-white/20 shadow-[0_8px_32px_0_rgba(31,38,135,0.37)]">
             <div className="flex-1">
                 <Link to="/" className="btn btn-ghost text-xl">
                     Galaxy-Events
