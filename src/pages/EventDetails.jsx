@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate, Link } from 'react-router';
+import { useParams, Link } from 'react-router';
 import { MdArrowBack } from 'react-icons/md';
 import SimpleMap from '../components/SimpleMap';
 
@@ -7,7 +7,6 @@ const EventDetails = () => {
     const { id } = useParams();
     const [event, setEvent] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
-    const navigate = useNavigate();
 
     useEffect(() => {
         setIsLoading(true);

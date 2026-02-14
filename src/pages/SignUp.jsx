@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router';
 
 const SignUp = () => {
@@ -18,7 +18,7 @@ const SignUp = () => {
         }));
     };
 
-    const handleSubmit = async (e) => {
+    const handleSignUp = async (e) => {
         e.preventDefault();
         setLoading(true);
         setError('');
@@ -57,7 +57,7 @@ const SignUp = () => {
         <div className="hero bg-base-200 min-h-screen w-full">
             <div className="card bg-base-100 w-full max-w-sm shrink-0 shadow-2xl">
                 <div className="card-body">
-                    <form onSubmit={handleSubmit}>
+                    <form onSubmit={handleSignUp}>
                         <fieldset className="fieldset">
                             <legend className="text-3xl mb-4 font-bold">
                                 Create Account

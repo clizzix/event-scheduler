@@ -1,4 +1,3 @@
-import React from 'react';
 import { NavLink, Link, useLocation, useNavigate } from 'react-router';
 
 const Navbar = () => {

@@ -1,6 +1,5 @@
-import React from 'react';
 import Navbar from '../components/Navbar';
-import { Outlet, Link } from 'react-router';
+import { Outlet } from 'react-router';
 
 const MainLayout = () => {
     return (
