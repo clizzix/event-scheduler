@@ -17,10 +17,16 @@ const EventDetails = () => {
                 const res = await fetch(
                     `${import.meta.env.VITE_BACKEND_URL}/api/events/${id}`,
                 );
+
+                if (!res.ok) {
+                    throw new Error(`Failed to fetch event: ${res.statusText}`);
+                }
+
                 const data = await res.json();
                 setEvent(data);
             } catch (error) {
                 console.error(error);
+                setEvent(null);
             } finally {
                 setIsLoading(false);
             }

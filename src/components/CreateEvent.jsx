@@ -94,7 +94,7 @@ const CreateEvent = () => {
             </button>
 
             <dialog id="my_modal_4" className="modal">
-                <div className="modal-box w-11/12 max-w-5xl">
+                <div className="modal-box w-11/12 max-w-5xl  bg-white/10 backdrop-blur-md border border-white/20 rounded-3xl shadow-[0_8px_32px_0_rgba(31,38,135,0.37)] overflow-hidden">
                     <h3 className="font-bold text-lg mb-4">Host an Event</h3>
 
                     <div className="flex flex-col gap-4 items-center w-full">

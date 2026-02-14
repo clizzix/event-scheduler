@@ -1,4 +1,5 @@
 import { NavLink, Link, useLocation, useNavigate } from 'react-router';
+import Searchbar from './Searchbar';
 
 const Navbar = () => {
     useLocation();
@@ -13,11 +14,11 @@ const Navbar = () => {
     return (
         <div className="navbar bg-white/10 backdrop-blur-md border border-white/20 shadow-[0_8px_32px_0_rgba(31,38,135,0.37)]">
             <div className="flex-1">
-                <Link to="/" className="btn btn-ghost text-xl">
+                <Link to="/" className="btn btn-ghost text-xl text-white">
                     Galaxy-Events
                 </Link>
             </div>
-
+            <Searchbar />
             <div className="flex-none">
                 <ul className="menu menu-horizontal px-1 gap-4">
                     <li>
