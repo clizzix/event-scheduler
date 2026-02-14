@@ -14,7 +14,7 @@ const Navbar = () => {
         <div className="navbar bg-base-300 shadow-md">
             <div className="flex-1">
                 <Link to="/" className="btn btn-ghost text-xl">
-                    Event-Scheduler
+                    Galaxy-Events
                 </Link>
             </div>
 
@@ -28,6 +28,16 @@ const Navbar = () => {
                             }
                         >
                             Home
+                        </NavLink>
+                    </li>
+                    <li>
+                        <NavLink
+                            to="/events"
+                            className={({ isActive }) =>
+                                isActive ? 'bg-secondary text-white' : ''
+                            }
+                        >
+                            Events
                         </NavLink>
                     </li>
                     {!isLoggedIn ? (
@@ -62,16 +72,6 @@ const Navbar = () => {
                             <button onClick={handleLogout}>Logout</button>
                         </li>
                     )}
-                    <li>
-                        <NavLink
-                            to="/events"
-                            className={({ isActive }) =>
-                                isActive ? 'bg-secondary text-white' : ''
-                            }
-                        >
-                            Events
-                        </NavLink>
-                    </li>
                 </ul>
             </div>
         </div>

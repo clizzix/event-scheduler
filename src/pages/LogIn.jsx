@@ -53,36 +53,36 @@ const LogIn = () => {
     };
 
     return (
-        <div className="hero bg-base-200 min-h-screen w-full">
-            <div className="card bg-base-100 w-full max-w-sm shrink-0 shadow-2xl">
+        <div className="hero min-h-screen w-full">
+            <div className="card w-full max-w-sm shrink-0 bg-white/10 backdrop-blur-md border border-white/20 rounded-3xl shadow-[0_8px_32px_0_rgba(31,38,135,0.37)]">
                 <div className="card-body">
                     <form onSubmit={handleSubmit}>
                         <fieldset className="fieldset">
-                            <legend className="text-3xl mb-4 font-bold">
+                            <legend className="text-3xl mb-4 font-bold text-white">
                                 Login Now!
                             </legend>
-                            <label className="label">Email</label>
+                            <label className="label text-white">Email</label>
                             <input
                                 name="email"
                                 type="email"
-                                className="input"
+                                className="input bg-white/20 text-white placeholder-white/70 border-white/30"
                                 placeholder="Email"
                                 onChange={handleChange}
                                 value={formData.email}
                                 required
                             />
-                            <label className="label">Password</label>
+                            <label className="label text-white">Password</label>
                             <input
                                 name="password"
                                 type="password"
-                                className="input"
+                                className="input bg-white/20 text-white placeholder-white/70 border-white/30"
                                 placeholder="Password"
                                 onChange={handleChange}
                                 value={formData.password}
                                 required
                             />
                             <div>
-                                <a className="link link-hover">
+                                <a className="link link-hover text-white">
                                     Forgot password?
                                 </a>
                             </div>

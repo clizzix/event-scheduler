@@ -26,17 +26,23 @@ const EventDetails = () => {
         fetchEvents();
     }, [id]);
 
-    if (isLoading) return <div className="text-center mt-10">Loading...</div>;
-    if (!event) return <div className="text-center mt-10">Event not found</div>;
+    if (isLoading)
+        return <div className="text-center mt-10 text-white">Loading...</div>;
+    if (!event)
+        return (
+            <div className="text-center mt-10 text-white">Event not found</div>
+        );
 
     return (
         <div className="container mx-auto p-4">
-            <Link to="/events" className="btn btn-ghost mb-4 gap-2">
+            <Link to="/events" className="btn btn-ghost mb-4 gap-2 text-white">
                 <MdArrowBack /> Back to Events
             </Link>
-            <div className="card bg-base-300 shadow-xl border border-base-300">
+            <div className="card bg-white/10 backdrop-blur-md border border-white/20 rounded-3xl shadow-[0_8px_32px_0_rgba(31,38,135,0.37)] overflow-hidden">
                 <div className="card-body">
-                    <h1 className="card-title text-4xl mb-4">{event.title}</h1>
+                    <h1 className="card-title text-4xl mb-4 text-accent font-bold">
+                        {event.title}
+                    </h1>
                     <div className="flex flex-col gap-2 mb-6">
                         <div className="badge badge-secondary badge-outline">
                             {new Date(event.date).toLocaleString(undefined, {
@@ -48,11 +54,13 @@ const EventDetails = () => {
                                 timeZoneName: 'short',
                             })}
                         </div>
-                        <div className="text-lg text-gray-600">
+                        <div className="text-lg text-white/90">
                             📍 {event.location}
                         </div>
                     </div>
-                    <p className="text-lg italic">{event.description}</p>
+                    <p className="text-lg italic text-white/70">
+                        {event.description}
+                    </p>
                 </div>
                 <div>
                     <SimpleMap event={event} />

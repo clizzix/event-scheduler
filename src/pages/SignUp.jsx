@@ -54,48 +54,51 @@ const SignUp = () => {
     };
 
     return (
-        <div className="hero bg-base-200 min-h-screen w-full">
-            <div className="card bg-base-100 w-full max-w-sm shrink-0 shadow-2xl">
+        <div className="hero min-h-screen w-full">
+            <div className="card w-full max-w-sm shrink-0 bg-white/10 backdrop-blur-md border border-white/20 rounded-3xl shadow-[0_8px_32px_0_rgba(31,38,135,0.37)]">
                 <div className="card-body">
                     <form onSubmit={handleSignUp}>
                         <fieldset className="fieldset">
-                            <legend className="text-3xl mb-4 font-bold">
+                            <legend className="text-3xl mb-4 font-bold text-white">
                                 Create Account
                             </legend>
-                            <label htmlFor="name" className="label">
+                            <label htmlFor="name" className="label text-white">
                                 Name
                             </label>
                             <input
                                 name="name"
                                 id="name"
                                 type="text"
-                                className="input"
+                                className="input bg-white/20 text-white placeholder-white/70 border-white/30"
                                 placeholder="e.g John Doe"
                                 onChange={handleChange}
                                 value={formData.name}
                                 required
                             />
-                            <label htmlFor="email" className="label">
+                            <label htmlFor="email" className="label text-white">
                                 E-Mail
                             </label>
                             <input
                                 name="email"
                                 id="email"
                                 type="email"
-                                className="input"
+                                className="input bg-white/20 text-white placeholder-white/70 border-white/30"
                                 placeholder="e.g example@example.com"
                                 onChange={handleChange}
                                 value={formData.email}
                                 required
                             />
-                            <label htmlFor="password" className="label">
+                            <label
+                                htmlFor="password"
+                                className="label text-white"
+                            >
                                 Password
                             </label>
                             <input
                                 name="password"
                                 id="password"
                                 type="password"
-                                className="input"
+                                className="input bg-white/20 text-white placeholder-white/70 border-white/30"
                                 placeholder="Password"
                                 onChange={handleChange}
                                 value={formData.password}
