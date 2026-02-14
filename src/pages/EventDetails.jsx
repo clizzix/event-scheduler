@@ -3,6 +3,7 @@ import { useParams, Link } from 'react-router';
 import { MdArrowBack } from 'react-icons/md';
 import SimpleMap from '../components/SimpleMap';
 import DeleteBtn from '../components/DeleteBtn';
+import UpdateBtn from '../components/UpdateBtn';
 
 const EventDetails = () => {
     const { id } = useParams();
@@ -62,7 +63,10 @@ const EventDetails = () => {
                     <p className="text-lg italic text-white/70">
                         {event.description}
                     </p>
-                    <DeleteBtn eventId={event.id} />
+                    <div>
+                        <UpdateBtn event={event} />
+                        <DeleteBtn eventId={event.id} />
+                    </div>
                 </div>
 
                 <div>
