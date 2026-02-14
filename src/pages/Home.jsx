@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import EventCard from '../components/EventCard';
-import Hero from '../components/hero';
+import Hero from '../components/Hero';
 
 const Home = () => {
     const [isLoading, setIsLoading] = useState(false);
