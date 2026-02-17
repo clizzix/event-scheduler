@@ -22,7 +22,7 @@ const Navbar = () => {
             </div>
             <Searchbar />
             <div className="flex-none">
-                <ul className="menu menu-horizontal px-1 gap-4">
+                <ul className="menu menu-horizontal px-1 gap-2">
                     <li>
                         <NavLink
                             to="/"

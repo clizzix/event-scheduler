@@ -89,7 +89,7 @@ const CreateEvent = () => {
     return (
         <div>
             <button
-                className="btn btn-secondary fixed bottom-4 right-4 z-50"
+                className="btn btn-secondary fixed bottom-20 right-4 z-50"
                 onClick={() =>
                     document.getElementById('my_modal_4').showModal()
                 }

@@ -1,10 +1,11 @@
 import Navbar from '../components/Navbar';
+import Footer from '../components/Footer';
 import { Outlet } from 'react-router';
 import { ToastContainer } from 'react-toastify';
 
 const MainLayout = () => {
     return (
-        <div>
+        <div className="flex flex-col min-h-screen">
             <ToastContainer
                 position="top-right"
                 autoClose={5000}
@@ -18,9 +19,10 @@ const MainLayout = () => {
                 theme="dark"
             />
             <Navbar />
-            <div className="mx-auto">
+            <div className="mx-auto flex-grow w-full">
                 <Outlet />
             </div>
+            <Footer />
         </div>
     );
 };
