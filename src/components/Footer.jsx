@@ -4,7 +4,7 @@ import { FaGithub } from 'react-icons/fa';
 const Footer = () => {
     return (
         <div>
-            <footer className="footer h-16 sm:footer-horizontal bg-white/10 backdrop-blur-md border border-white/20 shadow-[0_8px_32px_0_rgba(31,38,135,0.37)] overflow-hidden items-center p-4">
+            <footer className="footer h-16 sm:footer-horizontal bg-white/10 backdrop-blur-md border border-white/20 shadow-[0_8px_32px_0_rgba(31,38,135,0.37)] overflow-hidden items-center p-4 mt-12">
                 <aside className="grid-flow-col items-center">
                     <svg
                         width="36"
