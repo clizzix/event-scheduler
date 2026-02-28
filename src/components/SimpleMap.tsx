@@ -1,11 +1,24 @@
 import GoogleMapReact from 'google-map-react';
 import { MdLocationOn } from 'react-icons/md';
+import { type Event } from '../schema';
 
-const Marker = () => <MdLocationOn className="text-error text-4xl" />;
+type MarkerProps = {
+    lat: number;
+    lng: number;
+    children?: React.ReactNode;
+};
 
-const SimpleMap = ({ event }) => {
-    const lat = Number(event?.latitude) || 0;
-    const lng = Number(event?.longitude) || 0;
+const Marker = ({ lat, lng }: MarkerProps) => (
+    <MdLocationOn className="text-error text-4xl" />
+);
+
+type SimpleMapProp = {
+    event: Event;
+};
+
+const SimpleMap = ({ event }: SimpleMapProp) => {
+    const lat = event?.latitude || 0;
+    const lng = event?.longitude || 0;
     const defaultProps = {
         center: { lat, lng },
         zoom: 11,

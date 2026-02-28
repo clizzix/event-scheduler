@@ -3,11 +3,15 @@ import { MdDelete } from 'react-icons/md';
 import { useNavigate } from 'react-router';
 import { toast } from 'react-toastify';
 
-const DeleteBtn = ({ eventId }) => {
+type DeleteBtnProps = {
+    eventId: number;
+};
+
+const DeleteBtn = ({ eventId }: DeleteBtnProps) => {
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
 
-    const handleDelete = async (e) => {
+    const handleDelete = async (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
         e.stopPropagation();
 
@@ -41,23 +45,16 @@ const DeleteBtn = ({ eventId }) => {
             );
 
             if (!res.ok) {
-                const data = await res.json();
-                throw new Error(data.error || 'Failed to delete event');
+                const errorData = await res.json().catch(() => ({}));
+                throw new Error(errorData.message || 'Failed to delete Event');
             }
-            toast.success('Deleted Successfully!', {
-                position: 'top-right',
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: false,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: 'dark',
-            });
+
+            toast.success('Deleted Successfully!');
             navigate('/events');
         } catch (error) {
-            console.error(error);
-            toast.error(error.message || 'Failed to delete event.');
+            const message =
+                error instanceof Error ? error.message : 'Unknown Error';
+            toast.error(message || 'Failed to delete Event');
         } finally {
             setLoading(false);
         }

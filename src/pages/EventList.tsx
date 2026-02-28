@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router';
-import EventCard from '../components/EventCard';
+import EventCard from '../components/EventCard.tsx';
 import CreateEvent from '../components/CreateEvent';
+import { type Event, GetEventsResponseSchema } from '../schema';
+import { z } from 'zod';
+import { toast } from 'react-toastify';
 
 const EventList = () => {
-    const [events, setEvents] = useState([]);
+    const [events, setEvents] = useState<Event[]>([]);
     const [isLoading, setIsLoading] = useState(false);
     const [searchParams] = useSearchParams();
     const searchQuery = searchParams.get('search');
@@ -16,11 +19,22 @@ const EventList = () => {
                 `${import.meta.env.VITE_BACKEND_URL}/api/events`,
                 { cache: 'no-store' },
             );
-            const data = await res.json();
+            const json = await res.json();
+            const { data, error, success } =
+                GetEventsResponseSchema.safeParse(json);
+            if (!success) {
+                throw new Error(error.message);
+            }
             setEvents(data.results);
             console.log(data);
         } catch (error) {
-            console.error(error);
+            if (error instanceof z.ZodError) {
+                toast.error(error.issues[0]?.message || 'Failed Validation');
+            } else {
+                const message =
+                    error instanceof Error ? error.message : 'Unknown error';
+                toast.error(message || 'Failed to Fetch Events');
+            }
         } finally {
             setIsLoading(false);
         }

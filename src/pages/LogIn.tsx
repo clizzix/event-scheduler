@@ -1,6 +1,8 @@
-import { useState } from 'react';
+import { useState, type ChangeEventHandler } from 'react';
 import { useNavigate } from 'react-router';
 import { toast } from 'react-toastify';
+import { z } from 'zod';
+import { LoginRequestSchema, LoginResponseSchema } from '../schema/index.ts';
 
 const LogIn = () => {
     const [formData, setFormData] = useState({
@@ -10,20 +12,20 @@ const LogIn = () => {
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
 
-    const handleChange = (e) => {
+    const handleChange: ChangeEventHandler<HTMLInputElement> = (e) => {
         setFormData((prev) => ({
             ...prev,
             [e.target.name]: e.target.value,
         }));
     };
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setLoading(true);
 
-        const { email, password } = formData;
-
         try {
+            const validatedData = LoginRequestSchema.parse(formData);
+
             const res = await fetch(
                 `${import.meta.env.VITE_BACKEND_URL}/api/auth/login`,
                 {
@@ -31,22 +33,30 @@ const LogIn = () => {
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify({ email, password }),
+                    body: JSON.stringify(validatedData),
                 },
             );
 
-            const data = await res.json();
+            const data: unknown = await res.json();
 
             if (!res.ok) {
-                throw new Error(data.message || 'Login failed');
+                const errorData = data as { message?: string };
+                throw new Error(errorData.message || 'Login failed');
             }
 
-            localStorage.setItem('token', data.token);
+            const responseData = LoginResponseSchema.parse(data);
+
+            localStorage.setItem('token', responseData.token);
             toast.success('Logged in successfully!');
             navigate('/events');
-        } catch (error) {
-            console.error('Login error:', error.message);
-            toast.error(error.message || 'Login failed.');
+        } catch (error: unknown) {
+            if (error instanceof z.ZodError) {
+                toast.error(error.issues[0]?.message || 'Validation failed');
+            } else {
+                const message =
+                    error instanceof Error ? error.message : 'Unknown error';
+                toast.error(message || 'Login failed.');
+            }
         } finally {
             setLoading(false);
         }

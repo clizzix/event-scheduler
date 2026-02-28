@@ -1,113 +1,111 @@
-import React, { useState, useEffect } from 'react';
-import { MdEdit } from 'react-icons/md';
+import React, { useState, type ChangeEventHandler, useRef } from 'react';
+import { MdAdd } from 'react-icons/md';
 import { toast } from 'react-toastify';
+import { CreateEventSchema, type CreateEventInput } from '../schema/index.ts';
+import { z } from 'zod';
 
-const UpdateBtn = ({ event }) => {
-    const [formData, setFormData] = useState({
+const CreateEvent = () => {
+    const [formData, setFormData] = useState<CreateEventInput>({
         title: '',
         description: '',
         date: '',
         location: '',
-        latitude: '',
-        longitude: '',
+        latitude: 0,
+        longitude: 0,
     });
     const [loading, setLoading] = useState(false);
+    const modalRef = useRef<HTMLDialogElement>(null);
 
-    useEffect(() => {
-        if (event) {
-            setFormData({
-                title: event.title || '',
-                description: event.description || '',
-                date: event.date
-                    ? new Date(event.date).toISOString().slice(0, 16)
-                    : '',
-                location: event.location || '',
-                latitude: event.latitude || '',
-                longitude: event.longitude || '',
-            });
-        }
-    }, [event]);
-
-    const handleChange = (e) => {
+    const handleChange: ChangeEventHandler<
+        HTMLInputElement | HTMLTextAreaElement
+    > = (e) => {
         setFormData((prev) => ({
             ...prev,
             [e.target.name]: e.target.value,
         }));
     };
 
-    const handleUpdate = async (e) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setLoading(true);
 
-        const token = localStorage.getItem('token');
-        if (!token) {
-            toast.error('You must be logged in to update an event');
+        if (!formData.location) {
+            const msg = 'Please enter a location';
+            toast.warn(msg);
             setLoading(false);
             return;
         }
+
+        const token = localStorage.getItem('token');
+        if (!token) {
+            const msg = 'You must be logged in to create an event';
+            toast.error(msg);
+            setLoading(false);
+            return;
+        }
+
         try {
+            const validatedData = CreateEventSchema.parse(formData);
             const res = await fetch(
-                `${import.meta.env.VITE_BACKEND_URL}/api/events/${event.id}`,
+                `${import.meta.env.VITE_BACKEND_URL}/api/events`,
                 {
-                    method: 'PUT',
+                    method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                         Authorization: `Bearer ${token}`,
                     },
-                    body: JSON.stringify({
-                        title: formData.title,
-                        description: formData.description,
-                        date: new Date(formData.date).toISOString(),
-                        location: formData.location,
-                        latitude: parseFloat(formData.latitude) || 0,
-                        longitude: parseFloat(formData.longitude) || 0,
-                    }),
+                    body: JSON.stringify(validatedData),
                 },
             );
 
             const data = await res.json();
 
             if (!res.ok) {
-                throw new Error(data.error || 'Failed to update event');
+                throw new Error(data.message || 'Failed to create event');
             }
 
-            toast.success('Event updated successfully!');
-            document.getElementById(`update_modal_${event.id}`).close();
+            toast.success('Event created successfully!');
+            modalRef.current?.close();
+
+            setFormData({
+                title: '',
+                description: '',
+                date: '',
+                location: '',
+                latitude: 0,
+                longitude: 0,
+            });
             window.location.reload();
         } catch (error) {
-            console.error(error);
-            toast.error(error.message || 'Failed to update event.');
+            if (error instanceof z.ZodError) {
+                toast.error(error.issues[0]?.message || 'Failed Validation.');
+            } else {
+                const message =
+                    error instanceof Error ? error.message : 'Unknown error';
+                toast.error(message || 'Failed to Create Event');
+            }
         } finally {
             setLoading(false);
         }
     };
 
-    if (!event) return null;
-
     return (
-        <>
+        <div>
             <button
-                className="btn btn-primary mt-2 text-white absolute top-8 right-24"
-                onClick={() =>
-                    document
-                        .getElementById(`update_modal_${event.id}`)
-                        .showModal()
-                }
+                className="btn btn-secondary fixed bottom-20 right-4 z-50"
+                onClick={() => modalRef.current?.showModal()}
             >
-                <MdEdit size={24} />
+                <MdAdd size={24} />
             </button>
 
-            <dialog
-                id={`update_modal_${event.id}`}
-                className="modal text-base-content"
-            >
+            <dialog ref={modalRef} className="modal">
                 <div className="modal-box w-11/12 max-w-5xl  bg-white/10 backdrop-blur-md border border-white/20 rounded-3xl shadow-[0_8px_32px_0_rgba(31,38,135,0.37)] overflow-hidden">
-                    <h3 className="font-bold text-lg mb-4">Update Event</h3>
+                    <h3 className="font-bold text-lg mb-4">Host an Event</h3>
 
-                    <div className="flex flex-col gap-4 items-center w-full ">
+                    <div className="flex flex-col gap-4 items-center w-full">
                         <form
                             className="flex flex-col gap-4 w-3/4"
-                            onSubmit={handleUpdate}
+                            onSubmit={handleSubmit}
                         >
                             <input
                                 type="text"
@@ -171,7 +169,7 @@ const UpdateBtn = ({ event }) => {
                                 className="btn btn-secondary mt-2"
                                 disabled={loading}
                             >
-                                {loading ? 'Updating...' : 'Update Event'}
+                                {loading ? 'Creating...' : 'Create Event'}
                             </button>
                         </form>
 
@@ -183,8 +181,8 @@ const UpdateBtn = ({ event }) => {
                     </div>
                 </div>
             </dialog>
-        </>
+        </div>
     );
 };
 
-export default UpdateBtn;
+export default CreateEvent;

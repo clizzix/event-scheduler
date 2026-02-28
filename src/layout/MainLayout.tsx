@@ -1,5 +1,5 @@
-import Navbar from '../components/Navbar';
-import Footer from '../components/Footer';
+import Navbar from '../components/Navbar.tsx';
+import Footer from '../components/Footer.tsx';
 import { Outlet } from 'react-router';
 import { ToastContainer } from 'react-toastify';
 
@@ -7,7 +7,7 @@ const MainLayout = () => {
     return (
         <div className="flex flex-col min-h-screen">
             <ToastContainer
-                position="top-right"
+                position="top-left"
                 autoClose={5000}
                 hideProgressBar={false}
                 newestOnTop={false}

@@ -1,6 +1,11 @@
 import { Link } from 'react-router';
+import type { Event } from '../schema';
 
-const EventCard = ({ event }) => {
+type EventCardProps = {
+    event: Event;
+};
+
+const EventCard = ({ event }: EventCardProps) => {
     return (
         <div className="flex flex-col gap-4 p-4 m-4 bg-white/10 backdrop-blur-md border border-white/20 rounded-3xl shadow-[0_8px_32px_0_rgba(31,38,135,0.37)]">
             <div>

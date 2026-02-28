@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router';
 import { MdArrowBack } from 'react-icons/md';
-import SimpleMap from '../components/SimpleMap';
-import DeleteBtn from '../components/DeleteBtn';
-import UpdateBtn from '../components/UpdateBtn';
+import SimpleMap from '../components/SimpleMap.tsx';
+import DeleteBtn from '../components/DeleteBtn.tsx';
+import UpdateBtn from '../components/UpdateBtn.tsx';
+import { EventSchema, type Event } from '../schema/index.ts';
+import { z } from 'zod';
 
 const EventDetails = () => {
     const { id } = useParams();
-    const [event, setEvent] = useState(null);
+    const [event, setEvent] = useState<Event | null>(null);
     const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
@@ -22,7 +24,11 @@ const EventDetails = () => {
                     throw new Error(`Failed to fetch event: ${res.statusText}`);
                 }
 
-                const data = await res.json();
+                const json = await res.json();
+                const { data, error, success } = EventSchema.safeParse(json);
+                if (!success) {
+                    throw new Error(error.message);
+                }
                 setEvent(data);
             } catch (error) {
                 console.error(error);
