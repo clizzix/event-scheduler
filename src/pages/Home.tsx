@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
-import EventCard from '../components/EventCard';
-import Hero from '../components/Hero';
+import EventCard from '../components/EventCard.tsx';
+import Hero from '../components/Hero.tsx';
 import {
     GetEventsResponseSchema,
     type Event,
     type GetEventsResponse,
-} from '../schema/index';
+} from '../schema/index.ts';
 import { z } from 'zod';
 
 const Home = () => {
@@ -19,11 +19,11 @@ const Home = () => {
                 const res = await fetch(
                     `${import.meta.env.VITE_BACKEND_URL}/api/events/`,
                 );
-                const json = (await res.json()) as GetEventsResponse;
+                const json = await res.json();
                 const { data, error, success } =
                     GetEventsResponseSchema.safeParse(json);
                 if (!success) {
-                    throw new Error(z.prettifyError(error));
+                    throw new Error(error.message);
                 }
                 setEvents(data.results);
                 console.log(data);

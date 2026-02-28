@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router';
 import { MdArrowBack } from 'react-icons/md';
-import SimpleMap from '../components/SimpleMap.jsx';
+import SimpleMap from '../components/SimpleMap.tsx';
 import DeleteBtn from '../components/DeleteBtn.tsx';
-import UpdateBtn from '../components/UpdateBtn.jsx';
+import UpdateBtn from '../components/UpdateBtn.tsx';
 import { EventSchema, type Event } from '../schema/index.ts';
 import { z } from 'zod';
 
@@ -27,7 +27,7 @@ const EventDetails = () => {
                 const json = await res.json();
                 const { data, error, success } = EventSchema.safeParse(json);
                 if (!success) {
-                    throw new Error(z.prettifyError(error));
+                    throw new Error(error.message);
                 }
                 setEvent(data);
             } catch (error) {

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router';
-import EventCard from '../components/EventCard';
+import EventCard from '../components/EventCard.tsx';
 import CreateEvent from '../components/CreateEvent';
 import { type Event, GetEventsResponseSchema } from '../schema';
 import { z } from 'zod';
@@ -23,7 +23,7 @@ const EventList = () => {
             const { data, error, success } =
                 GetEventsResponseSchema.safeParse(json);
             if (!success) {
-                throw new Error(z.prettifyError(error));
+                throw new Error(error.message);
             }
             setEvents(data.results);
             console.log(data);

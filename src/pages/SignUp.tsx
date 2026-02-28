@@ -1,8 +1,8 @@
 import { useState, type ChangeEventHandler } from 'react';
 import { useNavigate } from 'react-router';
 import { toast } from 'react-toastify';
-import { UserSchema, type User } from '../schema/index.js';
-import { z } from 'zod/v4';
+import { UserSchema, type User } from '../schema/index.ts';
+import { z } from 'zod';
 
 const SignUp = () => {
     const [formData, setFormData] = useState({

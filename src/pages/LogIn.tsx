@@ -2,7 +2,7 @@ import { useState, type ChangeEventHandler } from 'react';
 import { useNavigate } from 'react-router';
 import { toast } from 'react-toastify';
 import { z } from 'zod';
-import { LoginRequestSchema, LoginResponseSchema } from '../schema/index.js';
+import { LoginRequestSchema, LoginResponseSchema } from '../schema/index.ts';
 
 const LogIn = () => {
     const [formData, setFormData] = useState({
@@ -24,7 +24,7 @@ const LogIn = () => {
         setLoading(true);
 
         try {
-            const validatedData = LoginRequestSchema.safeParse(formData);
+            const validatedData = LoginRequestSchema.parse(formData);
 
             const res = await fetch(
                 `${import.meta.env.VITE_BACKEND_URL}/api/auth/login`,

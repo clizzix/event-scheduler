@@ -45,7 +45,7 @@ const CreateEvent = () => {
         }
 
         try {
-            const validatedData = CreateEventSchema.safeParse(formData);
+            const validatedData = CreateEventSchema.parse(formData);
             const res = await fetch(
                 `${import.meta.env.VITE_BACKEND_URL}/api/events`,
                 {

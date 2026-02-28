@@ -1,5 +1,5 @@
-import Navbar from '../components/Navbar';
-import Footer from '../components/Footer';
+import Navbar from '../components/Navbar.tsx';
+import Footer from '../components/Footer.tsx';
 import { Outlet } from 'react-router';
 import { ToastContainer } from 'react-toastify';
 
