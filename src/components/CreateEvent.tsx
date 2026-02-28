@@ -1,7 +1,7 @@
 import React, { useState, type ChangeEventHandler, useRef } from 'react';
 import { MdAdd } from 'react-icons/md';
 import { toast } from 'react-toastify';
-import { CreateEventSchema, type CreateEventInput } from '../schema/index.js';
+import { CreateEventSchema, type CreateEventInput } from '../schema/index.ts';
 import { z } from 'zod';
 
 const CreateEvent = () => {
@@ -10,11 +10,10 @@ const CreateEvent = () => {
         description: '',
         date: '',
         location: '',
-        latitude: '',
-        longitude: '',
+        latitude: 0,
+        longitude: 0,
     });
     const [loading, setLoading] = useState(false);
-    const [error, setError] = useState('');
     const modalRef = useRef<HTMLDialogElement>(null);
 
     const handleChange: ChangeEventHandler<
@@ -29,7 +28,6 @@ const CreateEvent = () => {
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setLoading(true);
-        setError('');
 
         if (!formData.location) {
             const msg = 'Please enter a location';
@@ -56,34 +54,26 @@ const CreateEvent = () => {
                         'Content-Type': 'application/json',
                         Authorization: `Bearer ${token}`,
                     },
-                    body: JSON.stringify({
-                        title: formData.title,
-                        description: formData.description,
-                        date: new Date(formData.date).toISOString(),
-                        location: formData.location,
-                        latitude: parseFloat(formData.latitude) || 0,
-                        longitude: parseFloat(formData.longitude) || 0,
-                    }),
+                    body: JSON.stringify(validatedData),
                 },
             );
 
-            const data: CreateEventInput = await res.json();
+            const data = await res.json();
 
             if (!res.ok) {
-                const errorData = data as { message?: string };
-                throw new Error(errorData.message || 'Failed to create event');
+                throw new Error(data.message || 'Failed to create event');
             }
-            const responseData = CreateEventSchema.safeParse(data);
 
             toast.success('Event created successfully!');
             modalRef.current?.close();
+
             setFormData({
                 title: '',
                 description: '',
                 date: '',
                 location: '',
-                latitude: '',
-                longitude: '',
+                latitude: 0,
+                longitude: 0,
             });
             window.location.reload();
         } catch (error) {

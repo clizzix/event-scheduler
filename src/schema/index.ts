@@ -15,7 +15,7 @@ export const LoginResponseSchema = z.object({
     token: z.string(),
     user: z.object({
         id: z.number(),
-        email: z.string().email(),
+        email: z.email(),
     }),
 });
 
@@ -25,11 +25,11 @@ export const EventSchema = z.object({
     description: z.string().min(10, 'Description is too short'),
     date: z.string(),
     location: z.string(),
-    latitude: z.string(),
-    longitude: z.string(),
+    latitude: z.coerce.number(),
+    longitude: z.coerce.number(),
     organizerId: z.number(),
-    createdAt: z.coerce.date(),
-    updatedAt: z.coerce.date(),
+    createdAt: z.string(),
+    updatedAt: z.string(),
 });
 
 export const CreateEventSchema = EventSchema.omit({

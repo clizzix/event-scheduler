@@ -1,12 +1,12 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router';
-import MainLayout from './layout/MainLayout';
-import Home from './pages/Home';
-import LogIn from './pages/LogIn';
-import SignUp from './pages/SignUp';
-import ProtectedLayout from './layout/ProtectedLayout';
-import EventDetails from './pages/EventDetails';
-import EventList from './pages/EventList';
+import MainLayout from './layout/MainLayout.tsx';
+import Home from './pages/Home.tsx';
+import LogIn from './pages/LogIn.tsx';
+import SignUp from './pages/SignUp.tsx';
+import ProtectedLayout from './layout/ProtectedLayout.tsx';
+import EventDetails from './pages/EventDetails.tsx';
+import EventList from './pages/EventList.tsx';
 
 const App = () => {
     return (

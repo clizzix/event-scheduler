@@ -7,7 +7,7 @@ const MainLayout = () => {
     return (
         <div className="flex flex-col min-h-screen">
             <ToastContainer
-                position="top-right"
+                position="top-left"
                 autoClose={5000}
                 hideProgressBar={false}
                 newestOnTop={false}
