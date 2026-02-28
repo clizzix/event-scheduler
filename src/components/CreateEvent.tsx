@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, type ChangeEventHandler, useRef } from 'react';
 import { MdAdd } from 'react-icons/md';
 import { toast } from 'react-toastify';
+import { CreateEventSchema, type CreateEventInput } from '../schema/index.js';
+import { z } from 'zod';
 
 const CreateEvent = () => {
-    const [formData, setFormData] = useState({
+    const [formData, setFormData] = useState<CreateEventInput>({
         title: '',
         description: '',
         date: '',
@@ -13,15 +15,18 @@ const CreateEvent = () => {
     });
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
+    const modalRef = useRef<HTMLDialogElement>(null);
 
-    const handleChange = (e) => {
+    const handleChange: ChangeEventHandler<
+        HTMLInputElement | HTMLTextAreaElement
+    > = (e) => {
         setFormData((prev) => ({
             ...prev,
             [e.target.name]: e.target.value,
         }));
     };
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setLoading(true);
         setError('');
@@ -42,6 +47,7 @@ const CreateEvent = () => {
         }
 
         try {
+            const validatedData = CreateEventSchema.safeParse(formData);
             const res = await fetch(
                 `${import.meta.env.VITE_BACKEND_URL}/api/events`,
                 {
@@ -61,14 +67,16 @@ const CreateEvent = () => {
                 },
             );
 
-            const data = await res.json();
+            const data: CreateEventInput = await res.json();
 
             if (!res.ok) {
-                throw new Error(data.error || 'Failed to create event');
+                const errorData = data as { message?: string };
+                throw new Error(errorData.message || 'Failed to create event');
             }
+            const responseData = CreateEventSchema.safeParse(data);
 
             toast.success('Event created successfully!');
-            document.getElementById('my_modal_4').close();
+            modalRef.current?.close();
             setFormData({
                 title: '',
                 description: '',
@@ -79,8 +87,13 @@ const CreateEvent = () => {
             });
             window.location.reload();
         } catch (error) {
-            console.error(error);
-            toast.error(error.message || 'Failed to create event.');
+            if (error instanceof z.ZodError) {
+                toast.error(error.issues[0]?.message || 'Failed Validation.');
+            } else {
+                const message =
+                    error instanceof Error ? error.message : 'Unknown error';
+                toast.error(message || 'Failed to Create Event');
+            }
         } finally {
             setLoading(false);
         }
@@ -90,14 +103,12 @@ const CreateEvent = () => {
         <div>
             <button
                 className="btn btn-secondary fixed bottom-20 right-4 z-50"
-                onClick={() =>
-                    document.getElementById('my_modal_4').showModal()
-                }
+                onClick={() => modalRef.current?.showModal()}
             >
                 <MdAdd size={24} />
             </button>
 
-            <dialog id="my_modal_4" className="modal">
+            <dialog ref={modalRef} className="modal">
                 <div className="modal-box w-11/12 max-w-5xl  bg-white/10 backdrop-blur-md border border-white/20 rounded-3xl shadow-[0_8px_32px_0_rgba(31,38,135,0.37)] overflow-hidden">
                     <h3 className="font-bold text-lg mb-4">Host an Event</h3>
 

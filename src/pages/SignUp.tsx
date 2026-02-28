@@ -1,6 +1,8 @@
-import { useState } from 'react';
+import { useState, type ChangeEventHandler } from 'react';
 import { useNavigate } from 'react-router';
 import { toast } from 'react-toastify';
+import { UserSchema, type User } from '../schema/index.js';
+import { z } from 'zod/v4';
 
 const SignUp = () => {
     const [formData, setFormData] = useState({
@@ -11,20 +13,20 @@ const SignUp = () => {
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
 
-    const handleChange = (e) => {
+    const handleChange: ChangeEventHandler<HTMLInputElement> = (e) => {
         setFormData((prev) => ({
             ...prev,
             [e.target.name]: e.target.value,
         }));
     };
 
-    const handleSignUp = async (e) => {
+    const handleSignUp = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setLoading(true);
 
-        const { name, email, password } = formData;
-
         try {
+            const validatedData = UserSchema.parse(formData);
+
             const res = await fetch(
                 `${import.meta.env.VITE_BACKEND_URL}/api/users`,
                 {
@@ -32,20 +34,26 @@ const SignUp = () => {
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify({ name, email, password }),
+                    body: JSON.stringify(validatedData),
                 },
             );
 
-            const data = await res.json();
-
+            const resData = await res.json();
             if (!res.ok) {
-                throw new Error(data.error || 'Sign up failed');
+                throw new Error(resData.message || 'Sign up failed');
             }
             toast.success('Signed up successfully! Please log in.');
             navigate('/login');
-        } catch (error) {
-            console.error('Signup error:', error.message);
-            toast.error(error.message || 'Sign up failed.');
+        } catch (error: unknown) {
+            if (error instanceof z.ZodError) {
+                const firstErrorMessage =
+                    error.issues[0]?.message || 'Validation failed';
+                toast.error(firstErrorMessage);
+            } else {
+                const message =
+                    error instanceof Error ? error.message : 'Unknown error';
+                toast.error(message);
+            }
         } finally {
             setLoading(false);
         }

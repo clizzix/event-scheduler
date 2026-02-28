@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import EventCard from '../components/EventCard';
 import Hero from '../components/Hero';
+import { GetEventsResponseSchema, type Event } from '../schema/index';
+import { z } from 'zod';
 
 const Home = () => {
     const [isLoading, setIsLoading] = useState(false);
-    const [events, setEvents] = useState([]);
+    const [events, setEvents] = useState<Event[]>([]);
 
     useEffect(() => {
         setIsLoading(true);
@@ -13,7 +15,12 @@ const Home = () => {
                 const res = await fetch(
                     `${import.meta.env.VITE_BACKEND_URL}/api/events/`,
                 );
-                const data = await res.json();
+                const json = await res.json();
+                const { data, error, success } =
+                    GetEventsResponseSchema.safeParse(json);
+                if (!success) {
+                    throw new Error(z.prettifyError(error));
+                }
                 setEvents(data.results);
                 console.log(data);
             } catch (error) {
